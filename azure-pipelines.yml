@@ -1,0 +1,44 @@
+
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage:
+  jobs:
+  - job: Buildjob
+    steps:
+    - bash: echo "Do the build!"
+
+- stage: Devdeploy
+  jobs:
+  - deployment: DevDeployJob
+    environment: Dev
+    strategy:
+      runOnce:  
+       deploy:
+         steps:
+         - script: echo deploy to Dev 
+
+- stage: QAdeploy
+  jobs:
+  - deployment: QADeployJob
+    environment: QA
+    strategy:
+      runOnce:  
+       deploy:
+         steps:
+         - script: echo deploy to QA 
+
+- stage: StagingDeploy
+  jobs:
+  - deployment: StagingDeployJob
+    environment: Staging
+    strategy:
+      runOnce:  
+       deploy:
+         steps:
+         - script: echo deploy to staging 
